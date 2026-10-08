@@ -1,50 +1,132 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Student Feedback</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Feedback Portal</title>
   <style>
-    body { font-family: Arial; background:#eef2f7; margin:0; }
-    header { background:#1a3c6e; color:#fff; padding:20px; text-align:center; }
-    .box { background:#fff; width:420px; margin:25px auto; padding:20px; border-radius:8px; box-shadow:0 2px 6px #0002; }
-    label { display:block; margin-top:12px; font-weight:bold; }
-    input, select, textarea { width:100%; padding:8px; margin-top:4px; box-sizing:border-box; }
-    button { margin-top:18px; width:100%; padding:10px; background:#1a3c6e; color:#fff; border:none; cursor:pointer; }
+    * { box-sizing: border-box; }
+    body { font-family: Arial, Helvetica, sans-serif; background: #eef2f7; margin: 0; color: #1f2d3d; }
+    header { background: #1a3c6e; color: #fff; padding: 22px 15px; text-align: center; }
+    header h1 { margin: 0 0 6px; font-size: 26px; }
+    header p { margin: 0; font-size: 14px; opacity: .95; }
+    .card { background: #fff; width: 100%; max-width: 410px; margin: 20px auto; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+    label { display: block; margin-top: 14px; font-weight: bold; font-size: 14px; }
+    input, select, textarea { width: 100%; padding: 10px; margin-top: 6px; border: 1px solid #cfd8e3; border-radius: 5px; font-size: 14px; font-family: inherit; }
+    textarea { resize: vertical; }
+    button { margin-top: 20px; width: 100%; padding: 12px; background: #0f766e; color: #fff; border: none; border-radius: 5px; font-size: 15px; cursor: pointer; }
+    button:hover { background: #0d5f58; }
+    #thanks { display: none; background: #e6f6f4; border: 1px solid #0f766e; color: #0b5a54; padding: 14px; border-radius: 6px; margin-top: 16px; text-align: center; font-weight: bold; }
+    .summary-title { display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: bold; margin: 0 0 14px; }
+    .badge { background: #f59e0b; color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 10px; }
+    .avg { font-size: 14px; margin-bottom: 12px; }
+    .avg strong { font-size: 22px; color: #0f766e; }
+    .row { display: flex; align-items: center; gap: 10px; margin: 7px 0; font-size: 13px; }
+    .row .name { width: 42px; }
+    .bar { flex: 1; height: 10px; background: #e2e8f0; border-radius: 6px; overflow: hidden; }
+    .fill { height: 100%; background: #0f766e; width: 0; transition: width .4s; }
+    .row .count { width: 22px; text-align: right; }
+    footer { text-align: center; font-size: 12px; color: #6b7a8c; padding: 10px 0 25px; }
   </style>
 </head>
 <body>
-  <header><h1>Student Feedback Form (v2)</h1></header>
-  <div class="box">
+
+  <header>
+    <h1>Student Feedback Portal</h1>
+    <p>VIT Vellore &ndash; School of Computer Science Engineering and Information Systems</p>
+  </header>
+
+  <div class="card">
     <form id="fbForm">
-      <label>Course Name</label><input type="text" id="course" required>
-      <label>Faculty Name</label><input type="text" id="faculty" required>
-      <label>Student Name</label><input type="text" id="sname" required>
-      <label>Register Number</label><input type="text" id="regno" required>
-      <label>Department</label><input type="text" id="dept" required>
-      <label>Rating</label>
-      <select id="rating" required>
-        <option value="">Select</option>
-        <option value="5">5 - Excellent</option><option value="4">4 - Good</option>
-        <option value="3">3 - Average</option><option value="2">2 - Poor</option><option value="1">1 - Very Poor</option>
+      <label for="course">Course Name</label>
+      <select id="course" required>
+        <option value="">-- Select Course --</option>
+        <option>DevOps and Agile Development</option>
+        <option>Software Testing</option>
+        <option>Software Engineering</option>
+        <option>Database Systems</option>
+        <option>Operating Systems</option>
+        <option>Computer Networks</option>
       </select>
-      <label>Feedback / Comments</label><textarea id="comments" rows="4"></textarea>
-      <button type="submit">Submit</button>
+
+      <label for="faculty">Faculty Name</label>
+      <input type="text" id="faculty" placeholder="e.g. Dr. R. Kumar" required>
+
+      <label for="sname">Student Name</label>
+      <input type="text" id="sname" placeholder="Your full name" required>
+
+      <label for="regno">Register Number</label>
+      <input type="text" id="regno" placeholder="e.g. 24MIS0292" required>
+
+      <label for="dept">Department</label>
+      <input type="text" id="dept" value="SCORE &ndash; Software Engineering" required>
+
+      <label for="rating">Rating</label>
+      <select id="rating" required>
+        <option value="">-- Select Rating --</option>
+        <option value="5">5 - Excellent</option>
+        <option value="4">4 - Good</option>
+        <option value="3">3 - Average</option>
+        <option value="2">2 - Poor</option>
+        <option value="1">1 - Very Poor</option>
+      </select>
+
+      <label for="comments">Feedback / Comments</label>
+      <textarea id="comments" rows="4" placeholder="Write your feedback here..."></textarea>
+
+      <button type="submit">Submit Feedback</button>
+      <div id="thanks">Thank you for your feedback!</div>
     </form>
   </div>
-  <div class="box" id="thanks" style="display:none; text-align:center;">
-    <h2 style="color:green;">Thank you for your feedback!</h2>
-    <p id="summary"></p>
+
+  <div class="card">
+    <h3 class="summary-title">Course Rating Summary <span class="badge">NEW</span></h3>
+    <div class="avg">Average rating: <strong id="avg">0.0</strong> / 5 <span id="total"></span></div>
+    <div id="bars"></div>
   </div>
+
+  <footer>Version 2.0 &ndash; Added Course Rating Summary and Thank-you message</footer>
+
   <script>
-    let ratings = [];
-    document.getElementById('fbForm').addEventListener('submit', function(e) {
+    // Starting sample data (index 1..5 = star counts)
+    var counts = { 5: 4, 4: 6, 3: 2, 2: 1, 1: 0 };
+
+    function renderSummary() {
+      var total = 0, sum = 0, star;
+      for (star = 1; star <= 5; star++) {
+        total += counts[star];
+        sum += counts[star] * star;
+      }
+      var avg = total ? (sum / total).toFixed(1) : '0.0';
+      document.getElementById('avg').textContent = avg;
+      document.getElementById('total').textContent = '(' + total + ' responses)';
+
+      var html = '';
+      for (star = 5; star >= 1; star--) {
+        var pct = total ? (counts[star] / total) * 100 : 0;
+        html += '<div class="row">' +
+                  '<span class="name">' + star + ' star</span>' +
+                  '<div class="bar"><div class="fill" style="width:' + pct + '%"></div></div>' +
+                  '<span class="count">' + counts[star] + '</span>' +
+                '</div>';
+      }
+      document.getElementById('bars').innerHTML = html;
+    }
+
+    document.getElementById('fbForm').addEventListener('submit', function (e) {
       e.preventDefault();
-      ratings.push(parseInt(document.getElementById('rating').value));
-      const avg = (ratings.reduce((a,b) => a+b, 0) / ratings.length).toFixed(1);
-      document.getElementById('summary').innerText =
-        'Course rating summary: ' + avg + ' / 5 from ' + ratings.length + ' response(s)';
-      document.getElementById('thanks').style.display = 'block';
+      var r = parseInt(document.getElementById('rating').value, 10);
+      counts[r] += 1;
+      renderSummary();
+
+      var thanks = document.getElementById('thanks');
+      thanks.style.display = 'block';
       this.reset();
+      document.getElementById('dept').value = 'SCORE \u2013 Software Engineering';
+      setTimeout(function () { thanks.style.display = 'none'; }, 5000);
     });
+
+    renderSummary();
   </script>
 </body>
 </html>
